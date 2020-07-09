@@ -4,6 +4,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -19,7 +21,7 @@ public class Example {
         System.out.println();
         System.out.println(response.getContentType());
         System.out.println();
-        System.out.println(response.getHeader("Content-type"));
+        System.out.println(response.getHeader("Content-Type"));
         System.out.println();
         System.out.println(response.getStatusCode());
         System.out.println();
@@ -45,6 +47,26 @@ public class Example {
                 .statusCode(200).log().body();
     }
 
+    @Test
+    public void getUsersTwo() {
+        baseURI = "https://reqres.in/";
+        Response response =
+        given()
+                .param("page","2").
+        when()
+                .get("/api/users?page=2")
+        .then()
+                .statusCode(200)
+                .extract()
+                .response();
+
+        List<Integer> list = response.jsonPath().getList("data.id");
+
+        for(Integer l : list){
+            System.out.println(l);
+        }
+
+    }
 
     @Test
     public void postCreateUser() {
